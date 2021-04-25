@@ -2,14 +2,13 @@
 // @name         Vecorder
 // @namespace    https://www.joi-club.cn/
 // @version      0.53
-// @description  直播间内容记录
+// @description  直播间内容记录 https://github.com/Xinrea/Vecorder
 // @author       Xinrea
 // @match        https://live.bilibili.com/*
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_deleteValue
 // @require      https://cdn.staticfile.org/jquery/3.3.1/jquery.min.js
-// @require      https://greasyfork.org/scripts/407985-ajax-hook/code/Ajax-hook.js?version=832614
 // @require      https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js
 // @run-at 		 document-end
 // ==/UserScript==
