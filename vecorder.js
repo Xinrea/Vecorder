@@ -1,9 +1,10 @@
 // ==UserScript==
 // @name         Vecorder
 // @namespace    https://www.joi-club.cn/
-// @version      0.53
+// @version      0.60
 // @description  直播间内容记录 https://github.com/Xinrea/Vecorder
 // @author       Xinrea
+// @license      MIT
 // @match        https://live.bilibili.com/*
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -62,13 +63,12 @@ function gc() {
 function addPoint(t, msg) {
   let ltime = t * 1000;
   if (ltime == 0) return;
-  let name = getName();
-  let title = getRoomTitle();
+  let [name, link, title] = getRoomInfo();
   let id = nindexOf(name);
   if (id == -1) {
     db.push({
       name: name,
-      link: getLink(),
+      link: link,
       del: false,
       lives: [
         {
@@ -105,22 +105,12 @@ function getMsg(body) {
   return false;
 }
 
-function getName() {
-  return $(
-    "#head-info-vm > div > div > div.room-info-down-row > a.room-owner-username.live-skin-normal-a-text.dp-i-block.v-middle"
-  ).text();
-}
-
-function getLink() {
-  return $(
-    "#head-info-vm > div > div > div.room-info-down-row > a.room-owner-username.live-skin-normal-a-text.dp-i-block.v-middle"
-  ).attr("href");
-}
-
-function getRoomTitle() {
-  return $(
-    "#head-info-vm > div > div > div.room-info-upper-row.p-relative > div.normal-mode > div:nth-child(1) > h1 > span.title-length-limit.live-skin-main-text.v-middle.dp-i-block"
-  ).text();
+function getRoomInfo() {
+  let resp = $.ajax({
+      url: "https://api.live.bilibili.com/xlive/web-room/v1/index/getH5InfoByRoom?room_id="+getRoomID(),
+      async: false}).responseJSON.data;
+  console.log(resp)
+  return [resp.anchor_info.base_info.uname, "https://space.bilibili.com/" + resp.room_info.uid, resp.room_info.title]
 }
 
 // 根据当前地址获取直播间ID
@@ -130,11 +120,19 @@ function getRoomID() {
   var m = 0;
   if (i != -1) m = url_text.slice(i + 7);
   else m = url_text.slice(url_text.indexOf(".com/") + 5);
-  return parseInt(m); //获取当前房间号
+  let rid = parseInt(m);
+  console.log("Try1:",m);
+  if (isNaN(rid)) {
+      m = url_text.slice(url_text.indexOf(".com/blanc/") + 11);
+      console.log("Try2:"+m);
+      rid = parseInt(m);
+  }
+  return rid; //获取当前房间号
 }
 
 function tryAddPoint(msg) {
   // https://api.live.bilibili.com/room/v1/Room/room_init?id={roomID}
+    console.log(msg, getRoomID());
   $.ajax({
     url:
       "https://api.live.bilibili.com/room/v1/Room/room_init?id=" + getRoomID(),
@@ -178,6 +176,7 @@ waitForKeyElements(
     recordInput.bind("keypress", function (event) {
       if (event.keyCode == "13") {
         window.event.returnValue = false;
+          console.log("Enter detected");
         tryAddPoint($("#vecorder-input").val());
         $("#vecorder-input").val("");
       }
