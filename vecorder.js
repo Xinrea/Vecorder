@@ -9,7 +9,7 @@
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_deleteValue
-// @require      https://cdn.staticfile.org/jquery/3.3.1/jquery.min.js
+// @requere      https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js
 // @require      https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js
 // @run-at 		 document-end
 // ==/UserScript==
