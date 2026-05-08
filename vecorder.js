@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Vecorder
 // @namespace    https://www.joi-club.cn/
-// @version      1.0.0
+// @version      1.0.1
 // @description  直播间内容记录 https://github.com/Xinrea/Vecorder
 // @author       Xinrea
 // @license      MIT
@@ -590,7 +590,7 @@ function insertTimeInput() {
 
 console.log("Vecorder: 开始等待聊天输入区域元素");
 waitForKeyElements(
-  "#control-panel-ctnr-box > div.bottom-actions.p-relative",
+  "#control-panel-ctnr-box",
   insertTimeInput,
   true // 只执行一次
 );
